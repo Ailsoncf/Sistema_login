@@ -1,11 +1,10 @@
-const { Router } = require("express")
-const User = require("./models/User")
+const { Router } = require('express')
 
 const routes = Router()
 
-const AuthController = require("./controllers/AuthController")
+const AuthController = require('./controllers/AuthController')
 
-routes.post("/register", AuthController.signUp)
-routes.get("/register", AuthController.signIn)
+routes.post('/register', AuthController.signUp)
+routes.get('/register', AuthController.signIn)
 
 module.exports = routes

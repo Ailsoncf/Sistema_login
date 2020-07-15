@@ -1,5 +1,5 @@
-const User = require("../models/User")
-const bcrypt = require("bcryptjs")
+const User = require('../models/User')
+const bcrypt = require('bcryptjs')
 
 module.exports = {
   async signUp(request, response) {
@@ -11,7 +11,7 @@ module.exports = {
       if (emailExists)
         return response
           .status(409)
-          .json({ error: "Email already exists, try another one!" })
+          .json({ error: 'Email already exists, try another one!' })
 
       const hash = await bcrypt.hash(password, 10)
       const user = await User.create({
@@ -24,11 +24,11 @@ module.exports = {
 
       return response.json(user)
     } catch (err) {
-      return response.status(406).json({ error: "Registration Failed" })
+      return response.status(406).json({ error: 'Registration Failed' })
     }
   },
 
   async signIn(request, response) {
-    return response.json({ message: "funcionando" })
+    return response.json({ message: 'funcionando' })
   },
 }
