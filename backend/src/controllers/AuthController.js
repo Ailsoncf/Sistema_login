@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 module.exports = {
   async signUp(request, response) {
@@ -40,6 +41,10 @@ module.exports = {
 
     if (!comparePass)
       return response.status(401).send({ error: 'Invalid Password' })
+
+    user.password = undefined
+
+    const token = jwt.sign({ id: user.id })
 
     return response.json(user)
   },
