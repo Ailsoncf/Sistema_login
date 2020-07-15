@@ -23,13 +23,24 @@ module.exports = {
 
       user.password = undefined
 
-      return response.json(user)
+      return response.status(201).json(user)
     } catch (err) {
       return response.status(406).json({ error: 'Registration Failed' })
     }
   },
 
   async signIn(request, response) {
-    return response.json({ message: 'funcionando' })
+    const { email, password } = request.body
+
+    const user = await User.findOne({ email }).select('+password')
+
+    if (!user) return response.status(404).send({ error: 'User not found' })
+
+    const comparePass = await bcrypt.compare(password, user.password)
+
+    if (!comparePass)
+      return response.status(401).send({ error: 'Invalid Password' })
+
+    return response.json(user)
   },
 }
