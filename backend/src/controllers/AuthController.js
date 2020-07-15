@@ -1,6 +1,6 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
+const generateToken = require('../utils/genarateToken')
 
 module.exports = {
   async signUp(request, response) {
@@ -24,7 +24,9 @@ module.exports = {
 
       user.password = undefined
 
-      return response.status(201).json(user)
+      const token = generateToken(user.id)
+
+      return response.status(201).json({ user, token })
     } catch (err) {
       return response.status(406).json({ error: 'Registration Failed' })
     }
@@ -44,8 +46,8 @@ module.exports = {
 
     user.password = undefined
 
-    const token = jwt.sign({ id: user.id })
+    const token = generateToken(user.id)
 
-    return response.json(user)
+    return response.json({ user, token })
   },
 }
