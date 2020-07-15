@@ -10,6 +10,6 @@ const ProjectController = require('./controllers/ProjectController')
 routes.post('/register', AuthController.signUp)
 routes.post('/authenticate', AuthController.signIn)
 routes.use('/', authorization)
-routes.get('/', ProjectController.qlqrcoisa)
+routes.get('/', ProjectController.index)
 
 module.exports = routes
