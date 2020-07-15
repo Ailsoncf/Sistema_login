@@ -1,5 +1,5 @@
 module.exports = {
-  async qlqrcoisa(request, response) {
+  async index(request, response) {
     return response.send({ ok: true })
   },
 }
