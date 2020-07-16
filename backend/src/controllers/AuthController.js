@@ -1,6 +1,8 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const generateToken = require('../utils/genarateToken')
+const crypto = require('crypto')
+const mailer = require('../modules/mailer')
 
 module.exports = {
   async signUp(request, response) {
@@ -49,5 +51,50 @@ module.exports = {
     const token = generateToken(user.id)
 
     return response.json({ user, token })
+  },
+
+  async passrec(request, response) {
+    const { email } = request.body
+    try {
+      const user = await User.findOne({ email })
+
+      if (!user) return response.status(404).send({ error: 'User not found' })
+
+      const token = crypto.randomBytes(20).toString('hex')
+
+      const now = new Date()
+
+      now.setHours(now.getHours() + 1)
+
+      await User.findByIdAndUpdate(
+        user.id,
+        {
+          $set: {
+            passwordReset: token,
+            passwordResetExpires: now,
+          },
+        },
+        { new: true, useFindAndModify: false }
+      )
+
+      mailer.sendMail(
+        {
+          to: email,
+          from: 'ailson_cf@yahoo.com.br',
+          template: 'auth/forgotPass',
+          context: { token },
+        },
+        (err) => {
+          if (err)
+            return response
+              .status(400)
+              .send({ error: 'Cannot send recover email' })
+
+          return response.send()
+        }
+      )
+    } catch (err) {
+      response.status(400).send({ error: 'Error on forgot password' })
+    }
   },
 }

@@ -5,6 +5,6 @@ mongoose.connect('mongodb://localhost', {
   useUnifiedTopology: true,
 })
 
-mongoose.set('useCreateIndex', true)
+mongoose.set('useCreateIndex', true, 'useFindAndModify', false)
 
 module.exports = mongoose

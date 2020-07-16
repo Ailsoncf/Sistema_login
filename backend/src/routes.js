@@ -9,6 +9,7 @@ const ProjectController = require('./controllers/ProjectController')
 
 routes.post('/register', AuthController.signUp)
 routes.post('/authenticate', AuthController.signIn)
+routes.post('/forgot_pass', AuthController.passrec)
 routes.use('/', authorization)
 routes.get('/', ProjectController.index)
 
