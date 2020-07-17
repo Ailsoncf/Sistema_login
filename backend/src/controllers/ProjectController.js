@@ -1,5 +1,9 @@
+const User = require('../models/User')
+
 module.exports = {
-  async index(request, response) {
-    return response.send({ ok: true })
+  async show(request, response) {
+    const users = await User.find()
+
+    return response.status(200).json(users)
   },
 }

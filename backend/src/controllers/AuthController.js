@@ -97,4 +97,31 @@ module.exports = {
       response.status(400).send({ error: 'Error on forgot password' })
     }
   },
+
+  async passreset(request, response) {
+    const { email, token, password } = request.body
+
+    try {
+      const user = await User.findOne({ email }).select(
+        '+passwordResetToken passwordResetExpires'
+      )
+
+      if (!user) return response.status(404).send({ error: 'User not found' })
+
+      if (token == user.passwordResetToken)
+        return response.status(400).send({ error: 'Invalid Token' })
+
+      const now = new Date()
+
+      if (now > user.passwordResetExpires) user.password = password
+      await user.save()
+
+      response.send()
+      return response
+        .status(400)
+        .send({ error: 'Expired Token, generate a new one' })
+    } catch (err) {
+      return response.status(400).send({ error: 'Error on reset password' })
+    }
+  },
 }
