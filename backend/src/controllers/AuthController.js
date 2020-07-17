@@ -37,6 +37,7 @@ module.exports = {
   async signIn(request, response) {
     const { email, password } = request.body
 
+    console.log(password)
     const user = await User.findOne({ email }).select('+password')
 
     if (!user) return response.status(404).send({ error: 'User not found' })
@@ -70,7 +71,7 @@ module.exports = {
         user.id,
         {
           $set: {
-            passwordReset: token,
+            passwordResetToken: token,
             passwordResetExpires: now,
           },
         },
@@ -106,20 +107,23 @@ module.exports = {
         '+passwordResetToken passwordResetExpires'
       )
 
-      if (!user) return response.status(404).send({ error: 'User not found' })
+      if (!user) return response.status(400).send({ error: 'User not found' })
 
-      if (token == user.passwordResetToken)
-        return response.status(400).send({ error: 'Invalid Token' })
+      if (token !== user.passwordResetToken)
+        return response.status(400).send({ error: 'Token invalid' })
 
       const now = new Date()
 
-      if (now > user.passwordResetExpires) user.password = password
+      if (now > user.passwordResetExpires)
+        return response
+          .status(400)
+          .send({ error: 'Token expired, generate a new one' })
+
+      user.password = await bcrypt.hash(password, 10)
+
       await user.save()
 
       response.send()
-      return response
-        .status(400)
-        .send({ error: 'Expired Token, generate a new one' })
     } catch (err) {
       return response.status(400).send({ error: 'Error on reset password' })
     }

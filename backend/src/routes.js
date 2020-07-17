@@ -8,10 +8,10 @@ const AuthController = require('./controllers/AuthController')
 const ProjectController = require('./controllers/ProjectController')
 
 routes.post('/register', AuthController.signUp)
-routes.use('/', authorization)
 routes.post('/authenticate', AuthController.signIn)
 routes.post('/forgot_pass', AuthController.passrec)
 routes.post('/reset_pass', AuthController.passreset)
 routes.get('/users', ProjectController.show)
+routes.use('/', authorization)
 
 module.exports = routes
