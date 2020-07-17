@@ -37,7 +37,6 @@ module.exports = {
   async signIn(request, response) {
     const { email, password } = request.body
 
-    console.log(password)
     const user = await User.findOne({ email }).select('+password')
 
     if (!user) return response.status(404).send({ error: 'User not found' })
@@ -91,7 +90,7 @@ module.exports = {
               .status(400)
               .send({ error: 'Cannot send recover email' })
 
-          return response.send()
+          return response.send({ message: 'Email sent' })
         }
       )
     } catch (err) {
