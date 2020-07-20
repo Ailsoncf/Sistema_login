@@ -53,7 +53,7 @@ module.exports = {
     return response.json({ user, token })
   },
 
-  async passrec(request, response) {
+  async passRecover(request, response) {
     const { email } = request.body
     try {
       const user = await User.findOne({ email })
@@ -98,7 +98,7 @@ module.exports = {
     }
   },
 
-  async passreset(request, response) {
+  async passReset(request, response) {
     const { email, token, password } = request.body
 
     try {
