@@ -14,7 +14,7 @@ module.exports = {
       if (emailExists)
         return response
           .status(409)
-          .json({ error: 'Email already exists, try another one!' })
+          .json({ error: 'This user already exists, try another one!' })
 
       const hash = await bcrypt.hash(password, 10)
 
