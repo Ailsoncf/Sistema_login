@@ -8,7 +8,7 @@ const AuthController = require('./controllers/AuthController')
 const ProjectController = require('./controllers/ProjectController')
 
 routes.post('/register', AuthController.signUp)
-routes.post('/authenticate', AuthController.signIn)
+routes.get('/authenticate', AuthController.signIn)
 routes.post('/recover_pass', authorization, AuthController.passRecover)
 routes.post('/reset_pass', AuthController.passReset)
 routes.get('/users', ProjectController.show)
