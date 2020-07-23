@@ -12,5 +12,6 @@ routes.get('/authenticate', AuthController.signIn)
 routes.post('/recover_pass', authorization, AuthController.passRecover)
 routes.post('/reset_pass', AuthController.passReset)
 routes.get('/users', ProjectController.show)
+routes.get('/user/:id', ProjectController.showUser)
 
 module.exports = routes

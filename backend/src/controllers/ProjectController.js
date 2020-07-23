@@ -6,4 +6,12 @@ module.exports = {
 
     return response.status(200).json(users)
   },
+
+  async showUser(request, response) {
+    const { id } = request.params
+
+    const user = await User.findById({ _id: id })
+
+    return response.status(200).json(user)
+  },
 }
